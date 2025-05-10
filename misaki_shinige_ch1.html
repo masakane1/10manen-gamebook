@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>10万円の距離：ミサキ編 - 死にゲー第1章</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #fff; color: #222; }
+    .passage { margin-bottom: 2em; }
+    .choices button { display: block; margin: 0.5em 0; padding: 0.5em 1em; }
+    #result { margin-top: 2em; font-weight: bold; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+  <div class="passage" id="passage"></div>
+  <div class="choices" id="choices"></div>
+  <div id="result"></div>
+
+  <script>
+    let score = 0;
+    let current = 0;
+    let gameover = false;
+
+    const story = [
+      {
+        text: "初指名。ミサキは控えめに微笑んだが、どこか“線”を引いたような目だった。",
+        choices: [
+          { label: "初めまして。緊張してます", effect: 1 },
+          { label: "この店、初めてじゃないんだよね", effect: 0 },
+          { label: "今日はよろしく。いろいろ、楽しみにしてる", effect: "fail" }
+        ]
+      },
+      {
+        text: "沈黙の中で指が触れ合う。気まずさが先か、何かが始まる気配か。",
+        choices: [
+          { label: "ミサキちゃん、手冷たくない？", effect: 1 },
+          { label: "静かだね、集中してる？", effect: 0 },
+          { label: "マッサージって、どこまでしてくれるの？", effect: "fail" }
+        ]
+      },
+      {
+        text: "そろそろ、仰向けをお願いするタイミング。",
+        choices: [
+          { label: "仰向け、お願いしてもいいかな？", effect: 1 },
+          { label: "（無言で寝返る）", effect: 0 },
+          { label: "もう仰向けでいいでしょ？", effect: "fail" }
+        ]
+      },
+      {
+        text: "視線を合わせたまま、胸元のタオルに手を添える。",
+        choices: [
+          { label: "そっと手を伸ばしつつ目を合わせる", effect: 1 },
+          { label: "タオル越しに指を這わせる", effect: 0 },
+          { label: "いきなり触れる", effect: "fail" }
+        ]
+      },
+      {
+        text: "そのやわらかさに、ひとこと。",
+        choices: [
+          { label: "……すごく綺麗だと思った", effect: 1 },
+          { label: "柔らかいね", effect: 0 },
+          { label: "あー、たまんね", effect: "fail" }
+        ]
+      }
+    ];
+
+    function showScene(index) {
+      if (index >= story.length || gameover) return;
+      const scene = story[index];
+      document.getElementById("passage").innerHTML = `<p>${scene.text}</p>`;
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+
+      scene.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.label;
+        btn.onclick = () => handleChoice(choice.effect);
+        choicesDiv.appendChild(btn);
+      });
+    }
+
+    function handleChoice(effect) {
+      if (effect === "fail") {
+        document.getElementById("passage").innerHTML = "<p>ミサキは目を伏せた。「……もう、時間なので」</p>";
+        document.getElementById("choices").innerHTML = "";
+        document.getElementById("result").textContent = "NG客指定されました（塩対応END）";
+        gameover = true;
+        return;
+      }
+      score += effect;
+      current++;
+      if (current >= story.length) {
+        endGame();
+      } else {
+        showScene(current);
+      }
+    }
+
+    function endGame() {
+      document.getElementById("choices").innerHTML = "";
+      if (score >= 3) {
+        document.getElementById("result").innerHTML = "ミサキの瞳が柔らかく揺れた……惚れルートへ進行（第2章へ）<br><a href='https://masakane1.github.io/10manen-gamebook/10manen_misaki_chapter2.html'>▶ 第2章へ</a>";
+      } else {
+        document.getElementById("result").textContent = "「今日は、ありがとうございました」……お客さんルート終了";
+      }
+    }
+
+    showScene(0);
+  </script>
+</body>
+</html>
