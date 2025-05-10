@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ミサキ編：死にゲー第1章（揉み導入）</title>
+  <style>
+    body { font-family: sans-serif; font-size: 20px; line-height: 1.8; padding: 2em; background: #fff; color: #222; }
+    .passage { margin-bottom: 2em; }
+    .choices button { display: block; margin: 0.5em 0; font-size: 18px; padding: 0.75em 1.5em; }
+    #result { margin-top: 2em; font-weight: bold; font-size: 1.2em; }
+    #backToStart {
+      position: fixed;
+      top: 1em;
+      right: 1em;
+      background: #eee;
+      border: 1px solid #aaa;
+      padding: 0.5em 1em;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div id="backToStart" onclick="restartGame()">最初に戻る</div>
+  <div class="passage" id="passage"></div>
+  <div class="choices" id="choices"></div>
+  <div id="result"></div>
+
+  <script>
+    let score = 0;
+    let current = 0;
+    let gameover = false;
+
+    const story = [
+      {
+        text: "ミサキの指が、足先に触れた。無言で足裏から膝までを丁寧に流していく。",
+        choices: [
+          { label: "「くすぐったいかも…」と笑う", effect: 1 },
+          { label: "黙って見つめる", effect: 0 },
+          { label: "「もっと上までいける？」と聞く", effect: "fail" }
+        ]
+      },
+      {
+        text: "指先が内腿へと滑り、紙パンギリギリまで近づく。ミサキの動きが慎重になる。",
+        choices: [
+          { label: "目を閉じて深呼吸する", effect: 1 },
+          { label: "太ももに力が入る", effect: 0 },
+          { label: "ピクリと反応して腰を動かす", effect: "fail" }
+        ]
+      },
+      {
+        text: "明らかにビンビンになっている。ミサキの手が止まり、視線をそらした。",
+        choices: [
+          { label: "「……ごめん」だけ呟く", effect: 1 },
+          { label: "そっと腰を浮かせる", effect: 0 },
+          { label: "「感じてるのバレた？」と冗談を言う", effect: "fail" }
+        ]
+      },
+      {
+        text: "ミサキの胸元が目の前に落ちてくる。前かがみで鼠蹊部を触っている彼女の胸が揺れる。",
+        choices: [
+          { label: "視線を合わせないように胸元を見る", effect: 1 },
+          { label: "じっと胸を見つめる", effect: 0 },
+          { label: "「でか…」と呟く", effect: "fail" }
+        ]
+      },
+      {
+        text: "指先がわずかに浮き、胸の下側に触れた。ミサキは一瞬、息を呑む。",
+        choices: [
+          { label: "指を止めて彼女の反応を待つ", effect: 1 },
+          { label: "そっとなぞる", effect: 0 },
+          { label: "大胆に揉みしだく", effect: "fail" }
+        ]
+      },
+      {
+        text: "彼女の身体が硬直する。でも止めない。",
+        choices: [
+          { label: "手のひらで包み込む", effect: 1 },
+          { label: "何も言わずに揉む", effect: 0 },
+          { label: "「もっと近くに来てよ」と言う", effect: "fail" }
+        ]
+      }
+    ];
+
+    function showScene(index) {
+      const scene = story[index];
+      document.getElementById("passage").innerHTML = `<p>${scene.text}</p>`;
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+
+      // シャッフル
+      const shuffledChoices = [...scene.choices].sort(() => Math.random() - 0.5);
+      shuffledChoices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.label;
+        btn.onclick = () => handleChoice(choice.effect);
+        choicesDiv.appendChild(btn);
+      });
+    }
+
+    function handleChoice(effect) {
+      if (effect === "fail") {
+        document.getElementById("passage").innerHTML = "<p>ミサキは体を離し、目を伏せた。「……今日は、もう終わりにしますね」</p>";
+        document.getElementById("choices").innerHTML = "";
+        document.getElementById("result").textContent = "塩対応END（NG客指定）";
+        gameover = true;
+        return;
+      }
+      score += effect;
+      current++;
+      if (current >= story.length) {
+        endGame();
+      } else {
+        showScene(current);
+      }
+    }
+
+    function endGame() {
+      document.getElementById("choices").innerHTML = "";
+      if (score >= 4) {
+        document.getElementById("result").innerHTML = "彼女は止めなかった──揉み成功。惚れルートへ進行<br><a href='https://masakane1.github.io/10manen-gamebook/10manen_misaki_chapter2.html'>▶ 第2章へ</a>";
+      } else {
+        document.getElementById("result").textContent = "ミサキは静かに微笑んだ。「今日は、ありがとうございました」……お客さんルート終了";
+      }
+    }
+
+    function restartGame() {
+      score = 0;
+      current = 0;
+      gameover = false;
+      document.getElementById("result").textContent = "";
+      showScene(0);
+    }
+
+    window.onload = () => {
+      restartGame();
+    };
+  </script>
+</body>
+</html>
