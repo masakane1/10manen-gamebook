@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>10万円の距離：ミサキ編 - 第1章（完全リンク動作）</title>
+</head>
+<body>
+  <tw-storydata name="10万円の距離：ミサキ編 - 第1章" startnode="1" creator="ChatGPT" creator-version="4" ifid="chapter1-fixed" format="SugarCube" format-version="2.34.1" options="" hidden>
+
+    <tw-passagedata pid="1" name="start" tags="" position="100,100">
+      <h1>第1章：指先の温度</h1>
+      <p>──施術ルームの空気は、どこか静かで、濡れていた。</p>
+      <p>初回指名。「マサさん、ですよね？」</p>
+      <p>「本日は90分コースで……よろしくお願いします」</p>
+      <p>[[始める->Session1_A]]</p>
+    </tw-passagedata>
+
+    <tw-passagedata pid="2" name="Session1_A" tags="" position="200,100">
+      <p>足先からゆっくり、ふくらはぎ、太もも。</p>
+      <p>……それが、逆に意識させられる。</p>
+      <p>（なんだろう、この沈黙……）</p>
+      <p>[[少し話しかけてみる->talk_1]]<br>[[黙って見守る->silent_1]]</p>
+    </tw-passagedata>
+
+    <tw-passagedata pid="3" name="talk_1" tags="" position="300,100">
+      <p>「ミサキちゃん、指、細いですね」</p>
+      <p>「……そうですか？」</p>
+      <p>──やわらかい空気が流れる。</p>
+      <p>[[仰向けになるタイミングを探る->faceup_1]]</p>
+    </tw-passagedata>
+
+    <tw-passagedata pid="4" name="silent_1" tags="" position="400,100">
+      <p>俺は何も言わなかった。</p>
+      <p>（……気づかれてるな）</p>
+      <p>[[仰向けになるタイミングを探る->faceup_1]]</p>
+    </tw-passagedata>
+
+    <tw-passagedata pid="5" name="faceup_1" tags="" position="500,100">
+      <p>「……仰向け、お願いしてもいいですか？」</p>
+      <p>手が腹部に触れ、そして胸元へ。</p>
+      <p>[[そっとタオル越しに胸をなぞる->touch_1]]<br>[[目を見つめる->lookonly_1]]</p>
+    </tw-passagedata>
+
+    <tw-passagedata pid="6" name="touch_1" tags="" position="600,100">
+      <p>手を伸ばした。</p>
+      <p>「……それ、だめです」</p>
+      <p>[[第2章へ進む->https://masakane1.github.io/10manen-gamebook/10manen_misaki_chapter2.html]]</p>
+    </tw-passagedata>
+
+    <tw-passagedata pid="7" name="lookonly_1" tags="" position="700,100">
+      <p>手は出さなかった。ただ、彼女の目を見た。</p>
+      <p>──このルートはここで終了です。</p>
+    </tw-passagedata>
+
+  </tw-storydata>
+  
+<script>
+window.onload = function () {
+  const story = document.querySelector('tw-passagedata[name="start"]');
+  if (story) {
+    const container = document.createElement("div");
+    container.style.fontFamily = "sans-serif";
+    container.style.padding = "2em";
+    container.innerHTML = story.innerHTML;
+
+    function bindLinks() {
+      const links = container.querySelectorAll("a");
+      links.forEach(link => {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          const nextName = link.getAttribute("href").replace('#', '');
+          const next = document.querySelector(`tw-passagedata[name="${nextName}"]`);
+          if (next) {
+            container.innerHTML = next.innerHTML;
+            bindLinks();  // 再帰的にバインド
+          }
+        });
+      });
+    }
+
+    bindLinks(); // 最初にバインド
+    document.body.appendChild(container);
+  }
+};
+</script>
+
+</body>
+</html>
